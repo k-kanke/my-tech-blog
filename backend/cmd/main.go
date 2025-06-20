@@ -26,6 +26,8 @@ func main() {
 	r.GET("/articles", articleHandler.GetArticles)
 	r.POST("/articles", articleHandler.CreateArticle)
 	r.GET("/articles/:id", articleHandler.GetArticleByID)
+	r.PUT("/articles/:id", articleHandler.UpdateArticle)
+	r.DELETE("/articles/:id", articleHandler.DeleteArticle)
 
 	r.Run(":8080")
 }

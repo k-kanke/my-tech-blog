@@ -53,3 +53,41 @@ func (h *ArticleHandler) GetArticleByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, article)
 }
+
+func (h *ArticleHandler) UpdateArticle(c *gin.Context) {
+	id := c.Param("id")
+
+	var article model.Article
+	if err := h.DB.First(&article, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Article not found"})
+		return
+	}
+
+	var input model.Article
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	article.Title = input.Title
+	article.Content = input.Content
+	article.IsPublic = input.IsPublic
+
+	if err := h.DB.Save(&article).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, article)
+}
+
+func (h *ArticleHandler) DeleteArticle(c *gin.Context) {
+	id := c.Param("id")
+
+	if err := h.DB.Delete(&model.Article{}, id).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Article deleted"})
+}
