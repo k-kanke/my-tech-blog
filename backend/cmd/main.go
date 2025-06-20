@@ -23,11 +23,14 @@ func main() {
 		})
 	})
 
+	// サイト内の記事
 	r.GET("/articles", articleHandler.GetArticles)
 	r.POST("/articles", articleHandler.CreateArticle)
 	r.GET("/articles/:id", articleHandler.GetArticleByID)
 	r.PUT("/articles/:id", articleHandler.UpdateArticle)
 	r.DELETE("/articles/:id", articleHandler.DeleteArticle)
+
+	// zennで投稿した記事
 	r.GET("/zenn_articles", articleHandler.GetZennArticles)
 	r.POST("/zenn_articles", articleHandler.CreateZennArticle)
 
