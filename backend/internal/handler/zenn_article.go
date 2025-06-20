@@ -26,5 +26,10 @@ func (h *ArticleHandler) CreateZennArticle(c *gin.Context) {
 		return
 	}
 
+	if err := h.DB.Create(&zennArticle).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusCreated, zennArticle)
 }
