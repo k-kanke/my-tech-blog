@@ -22,8 +22,9 @@ jobs:
         run: pip install feedparser requests
 
       - name: Fetch Zenn RSS and Post
+        working-directory: ./backend
         env:
-          API_URL: https://YOUR_API_DOMAIN/zenn_articles  # 本番用
-          ZENN_FEED_URL: https://zenn.dev/YOUR_USERNAME/feed
+          API_URL: http://localhost:8080/zenn_articles  # ECSデプロイ後に本番用URLに変更する
+          ZENN_FEED_URL: https://zenn.dev/k__kanke/feed
         run: |
           python scripts/fetch_zenn.py
