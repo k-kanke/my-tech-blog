@@ -5,12 +5,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/yourname/blog-backend/internal/db"
+	"github.com/yourname/blog-backend/internal/handler"
 	"github.com/yourname/blog-backend/internal/model"
 )
 
 func main() {
 	dbConn := db.InitDB()
 	dbConn.AutoMigrate(&model.Article{}) // Articleテーブル自動生成
+
+	articleHandler := handler.NewArticleHandler(dbConn)
 
 	r := gin.Default()
 
@@ -19,6 +22,8 @@ func main() {
 			"status": "OK",
 		})
 	})
+
+	r.GET("/articles", articleHandler.GetArticles)
 
 	r.Run(":8080")
 }
