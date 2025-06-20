@@ -41,3 +41,15 @@ func (h *ArticleHandler) CreateArticle(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, article)
 }
+
+func (h *ArticleHandler) GetArticleByID(c *gin.Context) {
+	id := c.Param("id")
+
+	var article model.Article
+	if err := h.DB.First(&article, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Article not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, article)
+}
