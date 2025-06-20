@@ -24,6 +24,7 @@ func main() {
 	})
 
 	r.GET("/articles", articleHandler.GetArticles)
+	r.POST("/articles", articleHandler.CreateArticle)
 
 	r.Run(":8080")
 }

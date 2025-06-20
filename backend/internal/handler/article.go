@@ -25,3 +25,19 @@ func (h *ArticleHandler) GetArticles(c *gin.Context) {
 
 	c.JSON(http.StatusOK, articles)
 }
+
+func (h *ArticleHandler) CreateArticle(c *gin.Context) {
+	var article model.Article
+
+	if err := c.ShouldBindJSON(&article); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.DB.Create(&article).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, article)
+}
