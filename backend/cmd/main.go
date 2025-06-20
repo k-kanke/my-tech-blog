@@ -1,18 +1,16 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yourname/blog-backend/internal/db"
+	"github.com/yourname/blog-backend/internal/model"
 )
 
 func main() {
 	dbConn := db.InitDB()
-	if dbConn != nil {
-		log.Println("[aaaa]")
-	}
+	dbConn.AutoMigrate(&model.Article{}) // Articleテーブル自動生成
 
 	r := gin.Default()
 
