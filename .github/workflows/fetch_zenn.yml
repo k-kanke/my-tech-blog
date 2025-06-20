@@ -1,0 +1,29 @@
+name: Fetch Zenn Articles
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # UTCで0時 → 日本時間で9時ごろ
+  workflow_dispatch: 
+
+jobs:
+  fetch_zenn:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install feedparser
+        run: pip install feedparser requests
+
+      - name: Fetch Zenn RSS and Post
+        env:
+          API_URL: https://YOUR_API_DOMAIN/zenn_articles  # 本番用
+          ZENN_FEED_URL: https://zenn.dev/YOUR_USERNAME/feed
+        run: |
+          python scripts/fetch_zenn.py
