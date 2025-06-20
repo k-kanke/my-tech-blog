@@ -18,7 +18,15 @@ func NewArticleHandler(db *gorm.DB) *ArticleHandler {
 
 func (h *ArticleHandler) GetArticles(c *gin.Context) {
 	var articles []model.Article
-	if err := h.DB.Find(&articles).Error; err != nil {
+
+	isPublic := c.Query("is_public")
+	query := h.DB.Model(&model.Article{})
+
+	if isPublic == "true" {
+		query = query.Where("is_public = ?", true)
+	}
+
+	if err := query.Find(&articles).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
