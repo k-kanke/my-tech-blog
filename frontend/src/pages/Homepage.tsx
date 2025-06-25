@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchArticles } from '../api/articles';
 import { fetchZennArticles } from '../api/zennArticles';
+import { log } from 'console';
 
 type CombinedArticle = {
   type: 'article' | 'zenn';
@@ -16,27 +17,30 @@ const Homepage = () => {
 
   useEffect(() => {
     Promise.all([fetchArticles(), fetchZennArticles()]).then(([articlesRes, zennRes]) => {
-      const articles: CombinedArticle[] = articlesRes.data.map((a: any) => ({
-        type: 'article',
-        id: a.id,
-        title: a.title,
-        content: a.content,
-        date: a.created_at,
-      }));
+        console.log("Articles Response:", articlesRes.data);  
+        console.log("Zenn Articles Response:", zennRes.data);
+        const articles: CombinedArticle[] = articlesRes.data.map((a: any) => ({
+            type: 'article',
+            id: a.ID,
+            title: a.Title,
+            content: a.Content,
+            date: a.created_at,
+        }));
 
-      const zennArticles: CombinedArticle[] = zennRes.data.map((z: any) => ({
-        type: 'zenn',
-        id: z.id,
-        title: z.title,
-        url: z.url,
-        date: z.published_at,
-      }));
+        const zennArticles: CombinedArticle[] = zennRes.data.map((z: any) => ({
+            type: 'zenn',
+            id: z.ID,
+            title: z.Title,
+            url: z.Url,
+            date: z.Published_at,
+        }));
 
-      const combined = [...articles, ...zennArticles].sort((a, b) =>
-        a.date < b.date ? 1 : -1
-      );
+        const combined = [...articles, ...zennArticles].sort((a, b) =>
+            a.date < b.date ? 1 : -1
+        );
 
-      setCombinedArticles(combined);
+        console.log("[記事]: ", combined)
+        setCombinedArticles(combined);
     });
   }, []);
 
